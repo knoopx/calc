@@ -1,0 +1,36 @@
+[package]
+name = "calc"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "A plain-text notes sheet that computes: numbers, units, currencies and dates evaluated on every line as you type"
+
+[dependencies]
+chrono = { version = "0.4.45", default-features = false, features = ["clock", "std"] }
+chrono-tz = "0.10.4"
+fend-core = "1.5.8"
+regex = { version = "1.13.1", default-features = false, features = ["std", "perf", "unicode-perl", "unicode-case"] }
+eframe = { version = "0.37.0", default-features = false, features = ["wayland", "clipboard"] }
+miniz_oxide = "0.8"
+ureq = "3.4.2"
+serde_json = "1.0.154"
+
+[target.'cfg(not(windows))'.dependencies]
+eframe = { version = "0.37.0", default-features = false, features = ["glow"] }
+
+[target.'cfg(windows)'.dependencies]
+eframe = { version = "0.37.0", default-features = false, features = ["wgpu_no_default_features"] }
+wgpu = { version = "30", default-features = false, features = ["dx12", "std", "wgsl"] }
+
+[build-dependencies]
+miniz_oxide = "0.8"
+
+[profile.release]
+strip = true
+lto = "fat"
+codegen-units = 1
+
+[profile.local]
+inherits = "release"
+lto = "thin"
+codegen-units = 16
